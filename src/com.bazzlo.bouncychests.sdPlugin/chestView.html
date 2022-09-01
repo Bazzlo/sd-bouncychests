@@ -1,15 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html>
+
+<head>
     <title>com.bazzlo.bouncychests.view</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="view.css">
-  </head>
+</head>
 
-  <body>
+<body>
     <!-- Center view horizontally -->
-    <div class="main" id="chestViewer">
-      
+    <div class="main" id="container">
+    
     </div>
-  </body>
+
+    <script>
+        var chestCount = 0;
+        var container = document.querySelector('#container');
+        var chestSource = $("<div class='chest-wrapper'><div class='chest'></div><div class='sparkle-cw'></div><div class='sparkle-ccw'></div></div>");
+
+        function add(count) {
+            for(let i = 0; i < count; ++i) {
+                let clone = generateChest();
+
+                container.append(clone);
+                ++chestCount;
+            }
+        }
+
+        function remove(count) {
+            let loopEnd = Math.min(chestCount, count);
+            for(let i = 0; i < loopEnd; ++i) {
+                container.children().last().remove()
+                --chestCount;
+            }
+        }
+
+        function clear() {
+            container.empty();
+            chestCount = 0;
+        }
+
+        function generateChest() {
+            let clone = chestSource.clone();
+            //clone.attr('id', id);
+
+            // Chest container is 7x the font size
+            let scaleFactor = 7;
+
+            // For font size (in px): range of 10px to 60px
+            let randomBase = Math.ceil((Math.random() * 50) + 10);
+
+            clone.css("font-size", function () {
+                return randomBase + "px";
+            }).css("top", function () {
+                return Math.ceil((Math.random() * (1080 - (1080/scaleFactor))) - randomBase) + "px";
+            }).css("left", function () {
+                return Math.ceil((Math.random() * (1920 - (1920/scaleFactor))) - randomBase) + "px";
+            });
+
+            return clone;
+        }
+    </script>
+</body>
+
 </html>
