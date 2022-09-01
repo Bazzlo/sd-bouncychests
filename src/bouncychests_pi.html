@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>com.bazzlo.bouncychests</title>
+    <link rel="stylesheet" href="sdpi.css">
+    <script src="common.js"></script>
+</head>
+
+<body>
+    <div class="sdpi-wrapper">
+        <div type="range" class="sdpi-item">
+            <div class="sdpi-item-label">Change Value</div>
+            <div class="sdpi-item-value range">
+                <input class="setvalueSlider" type="range" min="-10" max="10" value="0" oninput="sendValueToPlugin(Number(event.target.value), 'amount')">
+            </div>
+        </div>
+        <div class="sdpi-item" id="single-check">
+            <div class="sdpi-item-label">Clear chests?</div>
+            <div class="sdpi-item-value">
+                <div class="sdpi-item-child">
+                    <input id="setClearCheckbox" type="checkbox" value="clear" onchange="sendValueToPlugin(event.target.checked, 'clear')">
+                    <label for="setClearCheckbox" class="sdpi-item-label"><span></span></label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var settingCache = {};
+        var pluginAction = null,
+            uuid = '',
+            aValueSlider = document.querySelector('.setvalueSlider'),
+            aCheckBox = document.querySelector('#setClearCheckbox');
+
+        if ($SD) {
+            $SD.on('connected', function (jsonObj) {
+                console.log("PI: Connected!");
+                console.log(jsonObj);
+
+                uuid = jsonObj['uuid'];
+                if (jsonObj.hasOwnProperty('actionInfo')) {
+                    pluginAction = jsonObj.actionInfo['action'];
+                }
+
+                settingCache = $SD.actionInfo.payload.settings;
+                if (settingCache["amount"]) {
+                    aValueSlider.value = settingCache.amount;
+                }
+                if (settingCache["clear"]) {
+                    aCheckBox.checked = settingCache["clear"];
+                }
+                console.log(settingCache);
+            });
+
+            $SD.on(pluginAction + '.didReceiveSettings', function (jsonObj) {
+                console.log("PI: didReceiveSettings!");
+            });
+        };
+
+        function sendValueToPlugin(value, param) {
+            settingCache[param] = value;
+            console.log("sendValueToPlugin!");
+            console.log(settingCache);
+
+            if($SD && $SD.connection) {
+                $SD.api.sendToPlugin(uuid, pluginAction, settingCache);
+            }
+        }
+    </script>
+</body>
+
+</html>

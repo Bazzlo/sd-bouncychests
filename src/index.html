@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+	<title>com.bazzlo.bouncychests</title>
+    <link rel="stylesheet" href="sdpi.css">
+    <script src="common.js"></script>
+</head>
+
+<body>
+	<script>
+		var chestsocket = null;
+
+		if ($SD) {
+			const actionName = "com.bazzlo.bouncychests.action";
+
+			$SD.on("connected", function (jsonObj) {
+				console.log("index.html: Connected!");
+				//connectBouncyChestsApp();
+
+				window.open('chestView.html');
+			});
+
+			$SD.on(actionName + ".willAppear", function (jsonObj) {
+				console.log("index.html: .willAppear!");
+				console.log(jsonObj);
+
+				updateTitle(jsonObj.context, jsonObj.payload.settings);
+			});
+
+			$SD.on(actionName + ".sendToPlugin", function (jsonObj) {
+				console.log("index.html: .sendToPlugin!");
+				console.log(jsonObj);
+
+				$SD.api.setSettings(jsonObj.context, jsonObj.payload);
+				updateTitle(jsonObj.context, jsonObj.payload);
+			});
+
+			$SD.on(actionName + ".keyUp", function (jsonObj) {
+				console.log("index.html: .keyUp!");
+				
+				let settings = jsonObj.payload.settings;
+				console.log(jsonObj);
+
+				var json = null;
+				if (settings.clear) {
+					json = {
+						"action" : "clear"
+					}
+				} else {
+					if (settings.amount > 0) {
+						json = {
+							"action" : "add",
+							"number" : settings.amount,
+						}
+					}
+					else {
+						json = {
+							"action" : "remove",
+							"number" : Math.abs(settings.amount),
+						}
+					}
+				}
+				console.log("index.html: sending data to chestsocket:");
+				console.log(json);
+				chestsocket.send(JSON.stringify(json));
+			});
+
+			function connectBouncyChestsApp() {
+				console.log("index.html: connectBouncyChestsApp!");
+				// Try connection to the bouncy chest app
+				if (chestsocket == null) {
+					chestsocket = new WebSocket("ws://127.0.0.1:3000");
+				}
+
+				chestsocket.onmessage = function(e) {
+					console.log('Bouncy chest app message: ', e.data);
+				}
+
+				chestsocket.onopen = function() {
+					console.log("App socket connected!");
+				}
+
+				chestsocket.onclose = function(e) {
+					console.log("Connection with app closed. Retrying in 1 second", e.reason);
+					setTimeout(function() {
+						chestsocket = null;
+						connectBouncyChestsApp();
+					}, 1000);
+				}
+
+				chestsocket.onerror = function(err) {
+					console.error("App socket error: ", err.message, 'Closing socket');
+					chestsocket.close();
+				}
+			}
+
+			function updateTitle(context, settings) {
+				console.log("index.html: updateTitle!");
+				console.log(settings);
+
+				if (settings.clear) {
+					$SD.api.setTitle(context, "Clear");
+				} else {
+					$SD.api.setTitle(context, settings.amount);
+				}
+			}
+		}
+
+	</script>
+</body>
+
+</html>
