@@ -9,8 +9,8 @@
 </head>
 
 <body>
+	
 	<script>
-		//var chestsocket = null;
 		var chestview = null;
 
 		if ($SD) {
@@ -46,54 +46,28 @@
 
 				var json = null;
 				if (settings.clear) {
-					chestView.clear();
+					console.log("index.html: Clearing all chests!");
+					chestview.clear();
 				} else {
 					if (settings.amount > 0) {
+						console.log("index.html: Adding" + settings.amount + " chests!");
 						chestview.add(settings.amount);
 					}
 					else {
+						console.log("index.html: Removing" + settings.amount + " chests!");
 						chestview.remove(Math.abs(settings.amount));
 					}
 				}
 			});
 
 			function openView() {
-				if(typeof(chestview) == 'undefined' || chestview == null) {
-					chestview = window.open('chestView.html');
+				if(typeof(chestview) == 'undefined' || chestview == null || chestview.closed) {
+					chestview = window.open('chestView.html', '_blank', "fullscreen=yes");
 				}
 				else {
-					chestView.focus();
+					chestview.focus();
 				}
 			}
-
-			//function connectBouncyChestsApp() {
-			//	console.log("index.html: connectBouncyChestsApp!");
-			//	// Try connection to the bouncy chest app
-			//	if (chestsocket == null) {
-			//		chestsocket = new WebSocket("ws://127.0.0.1:3000");
-			//	}
-//
-			//	chestsocket.onmessage = function(e) {
-			//		console.log('Bouncy chest app message: ', e.data);
-			//	}
-//
-			//	chestsocket.onopen = function() {
-			//		console.log("App socket connected!");
-			//	}
-//
-			//	chestsocket.onclose = function(e) {
-			//		console.log("Connection with app closed. Retrying in 1 second", e.reason);
-			//		setTimeout(function() {
-			//			chestsocket = null;
-			//			connectBouncyChestsApp();
-			//		}, 1000);
-			//	}
-//
-			//	chestsocket.onerror = function(err) {
-			//		console.error("App socket error: ", err.message, 'Closing socket');
-			//		chestsocket.close();
-			//	}
-			//}
 
 			function updateTitle(context, settings) {
 				console.log("index.html: updateTitle!");

@@ -20,6 +20,7 @@
   "CodePath": "index.html", 
   "PropertyInspectorPath": "bouncychests_pi.html",
   "Description": "Track the number of times you press a key.", 
+  "DefaultWindowSize": [1920, 1080],
   "Name": "Bouncy chests test", 
   "Icon": "pluginIcon", 
   "URL": "https://www.elgato.com/gaming/stream-deck", 

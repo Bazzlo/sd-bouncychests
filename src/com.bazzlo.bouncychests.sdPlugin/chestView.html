@@ -4,23 +4,25 @@
 <head>
     <title>com.bazzlo.bouncychests.view</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="view.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <!-- Center view horizontally -->
-    <div class="main" id="container">
+    <div id="container">
     
     </div>
 
     <script>
         var chestCount = 0;
-        var container = document.querySelector('#container');
+        var container = $("#container");
         var chestSource = $("<div class='chest-wrapper'><div class='chest'></div><div class='sparkle-cw'></div><div class='sparkle-ccw'></div></div>");
 
         function add(count) {
             for(let i = 0; i < count; ++i) {
-                let clone = generateChest();
+                let clone = generateChest(chestCount);
 
                 container.append(clone);
                 ++chestCount;
@@ -40,9 +42,9 @@
             chestCount = 0;
         }
 
-        function generateChest() {
+        function generateChest(id) {
             let clone = chestSource.clone();
-            //clone.attr('id', id);
+            clone.attr('id', id);
 
             // Chest container is 7x the font size
             let scaleFactor = 7;
@@ -53,9 +55,9 @@
             clone.css("font-size", function () {
                 return randomBase + "px";
             }).css("top", function () {
-                return Math.ceil((Math.random() * (1080 - (1080/scaleFactor))) - randomBase) + "px";
+                return Math.ceil((Math.random() * (window.innerHeight - (window.innerHeight/scaleFactor))) - randomBase) + "px";
             }).css("left", function () {
-                return Math.ceil((Math.random() * (1920 - (1920/scaleFactor))) - randomBase) + "px";
+                return Math.ceil((Math.random() * (window.innerWidth - (window.innerWidth/scaleFactor))) - randomBase) + "px";
             });
 
             return clone;
