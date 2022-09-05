@@ -4,8 +4,7 @@
 <head>
     <meta charset="utf-8" />
 	<title>com.bazzlo.bouncychests</title>
-    <link rel="stylesheet" href="sdpi.css">
-    <script src="common.js"></script>
+    <script src="../common.js"></script>
 </head>
 
 <body>
@@ -40,6 +39,9 @@
 				console.log("index.html: .keyUp!");
 
 				openView();
+
+				console.log("Opened window: ");
+				console.log(chestview);
 				
 				let settings = jsonObj.payload.settings;
 				console.log(jsonObj);
@@ -62,7 +64,7 @@
 
 			function openView() {
 				if(typeof(chestview) == 'undefined' || chestview == null || chestview.closed) {
-					chestview = window.open('chestView.html', '_blank', "fullscreen=yes");
+					chestview = window.open('chestView.html', '_blank');
 				}
 				else {
 					chestview.focus();

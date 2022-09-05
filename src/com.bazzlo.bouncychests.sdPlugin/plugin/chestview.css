@@ -1,5 +1,6 @@
 html, body {
-  background: rgba(0, 0, 0, 0);
+  background: #55ffff;
+  background-color: #55ffff;
 
   padding: 0;
   margin: 0;
@@ -11,10 +12,6 @@ html, body {
 
   overflow: hidden;
   position: relative;
-}
-
-body {
-  background-color: green;
 }
 
 #container {
@@ -66,7 +63,7 @@ body {
   animation-delay: 2s;
   animation-duration: 2.5s;
   animation-iteration-count: infinite;
-  background-image: url("images/gw2-chest.png");
+  background-image: url("../images/gw2-chest.png");
   height: 80%;
   left: 10%;
   width: 80%;
@@ -76,7 +73,7 @@ body {
 
 .sparkle-ccw {
   animation: ccwspin 10s linear infinite;
-  background-image: url("images/ccw-sparkle.png");
+  background-image: url("../images/ccw-sparkle.png");
   margin-top: -0.5em;
   opacity: 0.75;
   z-index: 1;
@@ -84,7 +81,7 @@ body {
 
 .sparkle-cw {
   animation: cwspin 5s linear infinite;
-  background-image: url("images/cw-sparkle.png");
+  background-image: url("../images/cw-sparkle.png");
   z-index: 2;
 }
 
@@ -119,34 +116,4 @@ body {
   85% { transform: rotate(20deg); }
   90% { transform: rotate(-10deg); }
   95% { transform: rotate(10deg); }
-}
-
-/* Debugging (add 'debug' class to HTML element) */
-.debug {
-  background-image: url("images/gw2-screenshot.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 100%;
-}
-
-.debug #controls {
-  display: block;
-}
-
-.debug .chest-wrapper::after {
-  content: attr(id);
-  font-size: 10px;
-  display: block;
-  text-align: center;
-  width: 100%;
-}
-
-/* Timer chests */
-.debug .chest-wrapper {
-  color: blue;
-}
-
-/* Normal chests */
-.debug .chest-wrapper[id$="-0"] {
-  color: black;
 }
